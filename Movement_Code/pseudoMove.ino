@@ -1,3 +1,5 @@
+//THIS CODE IS MORE OF A BLUEPRINT, IT IS NOT FINALIZED/COMPLETE
+
 // This is "code" for the Arduino, but since I am less practiced in arduino
 // code, I figured I may as well write it up as a text file while I wait on parts
 
@@ -10,7 +12,8 @@
 
 #include <IRremote.h>       //requires version 4.5.0 to run smoothly
 
-#define RECIEVER_PIN 13
+const byte IR_RECEIVE_PIN = 13;
+
 #define IN1_1 12
 #define ENA_1 11
 #define ENB_1 10
@@ -30,9 +33,6 @@
 void setup() {
     //set all used digital pins to output mode
 
-    //IR Reciever 
-    pinMode( RECIEVER_PIN , OUTPUT);     //not 100% sure this is an output?
-    
     //Motor Driver 1
     pinMode( ENA_1, OUTPUT);
     pinMode ( ENB_1, OUTPUT);
@@ -49,6 +49,9 @@ void setup() {
     pinMode (IN3_2, OUTPUT);
     pinMode (IN4_2, OUTPUT);
 
+    //setup IRremote
+    IrReciever.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+
     //for printing/debugging purposes:
     Serial.begin(9600);      //lets the Serial.Println() function work
 
@@ -64,7 +67,6 @@ void loop() {
         Serial.Println("Stopping...");
         delay(1000);
     } else {
-        //IF key pressed means "forward", go forward
         if(//KEY = FWD_Key){
             moveFWD();
             Serial.Println("Forward...");
@@ -108,6 +110,7 @@ void loop() {
         }
 
         delay(500);
+        IrReciever.resume();
     }
 
 }
